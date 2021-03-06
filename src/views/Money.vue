@@ -2,7 +2,6 @@
   <div class="nav-wrapper">
     <div class="content">
       <p>Money.vue</p>
-
     </div>
     <Nav/>
   </div>
@@ -15,7 +14,6 @@
 </script>
 
 <style scoped lang="scss">
-
   .nav-wrapper {
     border: 1px solid blue;
     display: flex;
