@@ -1,7 +1,7 @@
 <template>
   <div class="nav-wrapper">
     <div class="content">
-      Money.vue
+      <p>Money.vue</p>
 
     </div>
     <Nav/>
@@ -22,7 +22,10 @@
     flex-direction: column;
     height: 100vh;
   }
-  .content{
+
+  .content {
+    border: 1px solid green;
     flex-grow: 1;
+    overflow: auto;
   }
 </style>
