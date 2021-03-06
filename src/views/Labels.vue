@@ -1,10 +1,7 @@
 <template>
-  <div class="nav-wrapper">
-    <div class="content">
+    <Layout>
       <p>Labels</p>
-    </div>
-    <Nav/>
-  </div>
+    </Layout>
 </template>
 
 <script lang="ts">
