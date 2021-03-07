@@ -9,16 +9,3 @@
     name: 'Labels'
   };
 </script>
-
-<style scoped lang="scss">
-  .nav-wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-
-  .content {
-    flex-grow: 1;
-    overflow: auto;
-  }
-</style>
