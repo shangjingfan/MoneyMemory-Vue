@@ -26,11 +26,11 @@
 
   @Component
   export default class NumberPad extends Vue {
-    output = '0';//
+    output = '0'; // 不需要加 : string，有值会自己判断
 
     inputContent(event: MouseEvent) {
       const button = (event.target as HTMLButtonElement);
-      const input = button.textContent!;
+      const input = button.textContent!; // 表示button.textContent不为空
       if (this.output.length === 16) {return;}
       if (this.output === '0') {
         if ('0123456789'.indexOf(input) >= 0) {
@@ -54,6 +54,10 @@
 
     clear() {
       this.output = '0';
+    }
+
+    ok(){
+      console.log('ok')
     }
 
   }
