@@ -1,6 +1,5 @@
 <template>
   <Layout class-prefix="layout">
-    {{record}}
     <NumberPad :value.sync="record.amount" @submit="saveRecord"/>
     <Types :value.sync="record.type"/>
     <div class="notes-wrapper">
@@ -47,7 +46,6 @@
       const record2: RecordItem = recordListModel.clone(this.record);
       record2.createAt = new Date();
       this.recordList.push(record2);
-      console.log(this.recordList);
     }
 
     @Watch('recordList')
