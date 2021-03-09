@@ -1,6 +1,6 @@
 <template>
   <div class="numberPad">
-    <div class="output">{{output }}</div>
+    <div class="output">{{output}}</div>
     <div class="buttons">
       <button @click="inputContent">1</button>
       <button @click="inputContent">2</button>
@@ -22,14 +22,17 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, Prop} from 'vue-property-decorator';
 
   @Component
   export default class NumberPad extends Vue {
-    output = '0'; // 不需要加 : string，有值会自己判断
+    @Prop(Number) readonly value!: number;
+    output = this.value.toString();
 
     inputContent(event: MouseEvent) {
       const button = (event.target as HTMLButtonElement);
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const input = button.textContent!; // 表示button.textContent不为空
       if (this.output.length === 16) {return;}
       if (this.output === '0') {
@@ -56,9 +59,10 @@
       this.output = '0';
     }
 
-    ok(){
-      console.log('ok')
+    ok() {
+      this.$emit('update:value', parseFloat(this.output));
     }
+
 
   }
 </script>
