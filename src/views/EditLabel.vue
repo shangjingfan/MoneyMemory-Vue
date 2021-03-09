@@ -6,7 +6,11 @@
       <Icon class="rightIcon"/>
     </div>
     <div class="form-wrapper">
-      <FormItem :value="tag.name" field-name="标签名" placeholder="请输入标签名"/>
+      <FormItem :value="tag.name"
+                field-name="标签名"
+                placeholder="请输入标签名"
+                @update:value="updateTag"
+      />
     </div>
     <div class="wrapper">
       <Button>删除标签</Button>
@@ -25,23 +29,30 @@
     components: {Button, FormItem}
   })
   export default class EditLabel extends Vue {
-    tag?: {id: string; name: string } = undefined;
+    tag?: { id: string; name: string } = undefined;
+
     created() {
       const id = this.$route.params.id;
       tagListModel.fetch();
       const tags = tagListModel.data;
-      const tag = tags.filter(t=> t.id === id)[0]
-      if(tag){
+      const tag = tags.filter(t => t.id === id)[0];
+      if (tag) {
         this.tag = tag;
-      }else{
+      } else {
         this.$router.replace('/404');
+      }
+    }
+
+    updateTag(name: string) {
+      if (this.tag) {
+        tagListModel.update(this.tag.id, name);
       }
     }
   }
 </script>
 
 <style scoped lang="scss">
-  .navBar{
+  .navBar {
     text-align: center;
     font-size: 16px;
     padding: 12px 16px;
@@ -49,18 +60,22 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    > .title{
+
+    > .title {
     }
-    > .leftIcon, .rightIcon{
+
+    > .leftIcon, .rightIcon {
       width: 24px;
       height: 24px;
     }
   }
-  .form-wrapper{
+
+  .form-wrapper {
     background: white;
     margin-top: 8px;
   }
-  .wrapper{
+
+  .wrapper {
     text-align: center;
     padding: 16px;
     margin-top: 44-16px;
