@@ -9,6 +9,7 @@ type TagListModel = {
   create: (name: string) => 'success' | 'duplicated'; // 联合类型
   save: () => void;
   update: (id: string, name: string) => 'success' | 'not found' | 'duplicated';
+  remove: (id: string) => boolean;
 }
 
 const tagListModel: TagListModel = {
@@ -45,6 +46,18 @@ const tagListModel: TagListModel = {
     }else{
       return 'not found';
     }
+  },
+  remove(id){
+    let index = -1;
+    for(let i = 0; i< this.data.length; i++){
+      if(this.data[i].id === id){
+        index = i;
+        break;
+      }
+    }
+    this.data.splice(index, 1);
+    this.save();
+    return true;
   }
 };
 export default tagListModel;
