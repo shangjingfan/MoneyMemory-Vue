@@ -25,4 +25,7 @@ interface Window {
   removeTag: (id: string) => boolean;
   updateTag: (id: string, name: string) => 'success' | 'not found' | 'duplicated';
   // updateTag: TagListModel['update']; // 也可以这么写
+
+  recordList: RecordItem[];
+  createRecord: (record: RecordItem) => void;
 }
