@@ -1,9 +1,8 @@
 <template>
   <Layout>
     <Tabs class-prefix="type" :data-source="recordTypeList" :value.sync="type"/>
-    <Tabs class-prefix="interval" :data-source="intervalList" :value.sync="interval"/>
     <ol>
-      <li v-for="(group) in result " :key="group.title">
+      <li v-for="(group) in groupedList " :key="group.title">
         <h3 class="title">{{beautify(group.title)}}</h3>
         <ol>
           <li v-for="item in group.items" :key="item.id"
@@ -23,9 +22,9 @@
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import Tabs from '@/components/Tabs.vue';
-  import intervalList from '@/constants/intervalList';
   import recordTypeList from '@/constants/recordTypeList';
   import dayjs from 'dayjs';
+  import clone from '@/lib/clone';
 
   const api = dayjs();
   console.log(api);
@@ -58,30 +57,28 @@
       return (this.$store.state as RootState).recordList;
     }
 
-    get result() {
+    get groupedList() {
       const {recordList} = this;
-      // 方方这里是RecordList[]
-      type HashTableValue = { title: string; items: RecordItem[] }
-      const hashTable: { [key: string]: HashTableValue } = {};
+      if(recordList.length === 0){return [];}
 
-      for (let i = 0; i < recordList.length; i++) {
-        const [date, time] = recordList[i].createAt!.split('T');
-
-        hashTable[date] = hashTable[date] || {title: date, items: []};
-        hashTable[date].items.push(recordList[i]);
+      const newList = clone(recordList).sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
+      const result = [{title: dayjs(newList[0].createAt).format('YYYY-MM-DD'), items: [newList[0]]}];
+      for(let i = 1; i < newList.length; i++){
+        const current = newList[i];
+        const last = result[result.length - 1];
+        if(dayjs(last.title).isSame(dayjs(current.createAt), 'day')){
+          last.items.push(current);
+        }else{
+          result.push({title: dayjs(current.createAt).format('YYYY-MM-DD'), items: [current]});
+        }
       }
-      //
-      console.log(hashTable);
-      return hashTable;
+      return result;
     }
-
     beforeCreate() {
       this.$store.commit('fetchRecords');
     }
 
     type = '-';
-    interval = 'day';
-    intervalList = intervalList;
     recordTypeList = recordTypeList;
   }
 </script>
@@ -89,10 +86,10 @@
 <style scoped lang="scss">
   ::v-deep {
     .type-tabs-item {
-      background: white;
+      background: #c4c4c4;
 
       &.selected {
-        background: #c4c4c4;
+        background: white;
 
         &::after {
           display: none;
