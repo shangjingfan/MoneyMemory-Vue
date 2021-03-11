@@ -31,11 +31,9 @@
     get tag(){
       return this.$store.state.currentTag;
     }
-
     created() {
       const id = this.$route.params.id;
       this.$store.commit('setCurrentTag', id);
-      console.log(this.tag);
       if (!this.tag){
         this.$router.replace('/404');
       }
