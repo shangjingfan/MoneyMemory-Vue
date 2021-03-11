@@ -3,7 +3,7 @@
     <Tabs class-prefix="type" :data-source="recordTypeList" :value.sync="type"/>
     <ol>
       <li v-for="(group) in groupedList " :key="group.title">
-        <h3 class="title">{{beautify(group.title)}}</h3>
+        <h3 class="title">{{beautify(group.title)}}<span>￥{{group.total}}</span></h3>
         <ol>
           <li v-for="item in group.items" :key="item.id"
               class="record"
@@ -25,10 +25,6 @@
   import recordTypeList from '@/constants/recordTypeList';
   import dayjs from 'dayjs';
   import clone from '@/lib/clone';
-
-  const api = dayjs();
-  console.log(api);
-
 
   @Component({
     components: {Tabs}
@@ -61,17 +57,27 @@
       const {recordList} = this;
       if(recordList.length === 0){return [];}
 
-      const newList = clone(recordList).sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
-      const result = [{title: dayjs(newList[0].createAt).format('YYYY-MM-DD'), items: [newList[0]]}];
+      const newList = clone(recordList).filter(d => d.type === this.type).sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
+
+      type Result = {title: string; total?: number; items: RecordItem[]}[];
+      const result: Result = [{title: dayjs(newList[0].createAt).format('YYYY-MM-DD'), items: [newList[0]]}];
+
       for(let i = 1; i < newList.length; i++){
         const current = newList[i];
         const last = result[result.length - 1];
+
         if(dayjs(last.title).isSame(dayjs(current.createAt), 'day')){
           last.items.push(current);
         }else{
           result.push({title: dayjs(current.createAt).format('YYYY-MM-DD'), items: [current]});
         }
       }
+
+      result.map(group =>{
+        group.total = group.items.reduce(
+          (sum, item) => sum + item.amount, 0
+        )
+      })
       return result;
     }
     beforeCreate() {
