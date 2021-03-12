@@ -28,7 +28,7 @@ window.onload = function(){
 if(document.documentElement.clientWidth > 500){
   window.alert("请使用手机打开页面，保证浏览效果");
   const img = document.createElement('img');
-  img.src = 'https://s3.ax1x.com/2021/03/12/6Ucugf.png';
+  img.src = './qrcode.png';
   img.style.position = 'absolute';
   img.style.left = '50%';
   img.style.top = '50%';
