@@ -10,7 +10,8 @@ const store = new Vuex.Store({
   state: {
     recordList: [],
     tagList: [],
-    currentTag: undefined
+    currentTag: undefined,
+    createRecordError: null,
   } as RootState,
   mutations: {
     fetchRecords(state) {
@@ -28,6 +29,10 @@ const store = new Vuex.Store({
     },
     fetchTags(state) {
       state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]');
+      if(!state.tagList || state.tagList.length === 0){
+        const array = ['衣', '食', '住', '行'];
+        array.forEach(item => store.commit('createTag', item));
+      }
     },
     createTag(state, name: string) {
       const names = state.tagList.map(item => item.name);
@@ -37,7 +42,7 @@ const store = new Vuex.Store({
       const id = createId().toString();
       state.tagList.push({id, name: name});
       store.commit('saveTags');
-      window.alert('添加成功');
+      // window.alert('添加成功');
     },
     saveTags(state) {
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList));
@@ -70,9 +75,9 @@ const store = new Vuex.Store({
       if (index >= 0) {
         state.tagList.splice(index, 1);
         store.commit('saveTags');
-        router.back()
+        router.back();
       } else {
-        window.alert('刪除失敗')
+        window.alert('刪除失敗');
       }
     },
   }

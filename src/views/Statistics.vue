@@ -1,7 +1,7 @@
 <template>
   <Layout>
     <Tabs class-prefix="type" :data-source="recordTypeList" :value.sync="type"/>
-    <ol>
+    <ol v-if="groupedList.length > 0">
       <li v-for="(group) in groupedList " :key="group.title">
         <h3 class="title">{{beautify(group.title)}}<span>￥{{group.total}}</span></h3>
         <ol>
@@ -15,6 +15,9 @@
         </ol>
       </li>
     </ol>
+    <div v-else class="no-result">
+      还没有记录
+    </div>
   </Layout>
 </template>
 
@@ -31,7 +34,7 @@
   })
   export default class Statistics extends Vue {
     tagString(tags: Tag[]) {
-      return tags.length === 0 ? '无' : tags.join(',');
+      return tags.length === 0 ? '无' : tags.map(t => t.name).join('，');
     }
     beautify(string: string){
       const now = dayjs();
@@ -55,9 +58,10 @@
 
     get groupedList() {
       const {recordList} = this;
-      if(recordList.length === 0){return [];}
 
       const newList = clone(recordList).filter(d => d.type === this.type).sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
+
+      if(newList.length === 0){return [];}
 
       type Result = {title: string; total?: number; items: RecordItem[]}[];
       const result: Result = [{title: dayjs(newList[0].createAt).format('YYYY-MM-DD'), items: [newList[0]]}];
@@ -90,6 +94,10 @@
 </script>
 
 <style scoped lang="scss">
+  .no-result{
+    padding: 16px;
+    text-align: center;
+  }
   ::v-deep {
     .type-tabs-item {
       background: #c4c4c4;
