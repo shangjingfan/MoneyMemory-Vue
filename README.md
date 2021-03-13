@@ -1,4 +1,4 @@
-# wangcai-vue
+# MoneyMemory-Vue
 
 ## Project setup
 ```
