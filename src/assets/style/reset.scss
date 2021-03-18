@@ -8,6 +8,11 @@ a {
   text-decoration: none;
   color: inherit;
 }
+body{
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
 
 ul, ol {
  list-style: none;
