@@ -3,7 +3,7 @@ const path = require('path')
 // import path from 'path'
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-  ? '/YiJiZhang/'
+  ? '/money-memory-vue-website/'
   : '/',
   lintOnSave: false,
   chainWebpack: config =>{
