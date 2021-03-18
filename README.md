@@ -1,4 +1,4 @@
-# MoneyMemory-Vue
+# money-memory-vue
 
 ## Project setup
 ```
